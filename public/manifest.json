@@ -1,0 +1,83 @@
+{
+  "short_name": "Abreham's Portfolio",
+  "name": "Abreham Yetwale - Full Stack Developer Portfolio",
+  "description": "Professional portfolio showcasing projects and skills in web development",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "splash_pages": null,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://abrehamyetwale.netlify.app/manifest.json"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Projects",
+      "url": "/projects",
+      "description": "Browse my development projects"
+    },
+    {
+      "name": "Contact Me",
+      "url": "/contact",
+      "description": "Get in touch with me"
+    }
+  ],
+  "categories": ["development", "portfolio", "web development"],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "description": "Homepage screenshot"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "description": "Mobile view screenshot"
+    }
+  ],
+  "iarc_rating_id": "e84b072d-646b-46b7-9c5c-910d6f6e9564",
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay", "standalone"]
+}
