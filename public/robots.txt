@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+User-agent: *
+Allow: /
+Sitemap: https://abrehamyetwale.netlify.app/sitemap.xml
+
