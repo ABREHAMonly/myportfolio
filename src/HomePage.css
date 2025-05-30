@@ -1,14 +1,9 @@
 /* Modern Font Import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
 
-/* Rest of your CSS */
-body {
-  font-family: 'DM Sans', sans-serif;
-  /* ... */
-}
-/* Modern Color Palette */
+/* Color Palette with Dark Mode */
 :root {
+    /* Light Mode Colors */
     --primary: #6366f1;  /* Indigo */
     --primary-light: #818cf8;
     --primary-dark: #4f46e5;
@@ -26,12 +21,39 @@ body {
     --danger: #ef4444;
     --success: #10b981;
     
+    /* UI Elements */
     --glass: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.15);
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Text Colors */
+    --text-primary: var(--light);
+    --text-secondary: var(--gray);
+    --text-inverse: var(--darker);
+    
+    /* Backgrounds */
+    --bg-primary: var(--darker);
+    --bg-secondary: var(--dark);
+    --bg-card: var(--glass);
+    --bg-nav: rgba(15, 23, 42, 0.8);
+    
+    /* Form Elements */
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-focus: rgba(99, 102, 241, 0.2);
 }
 
+/* Dark Mode Overrides */
+.dark-mode {
+    /* You can adjust these if you want different dark mode colors */
+    --glass: rgba(0, 0, 0, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --bg-nav: rgba(15, 23, 42, 0.95);
+}
+
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -44,15 +66,17 @@ html {
 
 body {
     font-family: 'Inter', sans-serif;
-    color: var(--light);
-    background-color: var(--darker);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    transition: background-color 0.3s ease;
 }
 
 h1, h2, h3, h4 {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
+    color: var(--text-primary);
 }
 
 a {
@@ -60,13 +84,30 @@ a {
     color: inherit;
 }
 
+/* Skip Link (Accessibility) */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Buttons */
 .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0.8rem 1.8rem;
     background: var(--primary);
-    color: var(--light);
+    color: var(--text-primary);
     border-radius: 8px;
     font-weight: 600;
     transition: var(--transition);
@@ -96,8 +137,14 @@ a {
     border-color: var(--primary-light);
 }
 
+.button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Glass Card Effect */
 .glass-card {
-    background: var(--glass);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 12px;
@@ -113,6 +160,7 @@ a {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+/* Section Styles */
 .section {
     padding: 6rem 0;
     position: relative;
@@ -148,7 +196,7 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--darker);
+    background: var(--bg-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -200,7 +248,7 @@ a {
     font-size: 2.5rem;
     font-weight: 700;
     font-family: 'Space Grotesk', sans-serif;
-    color: var(--light);
+    color: var(--text-primary);
     position: relative;
 }
 
@@ -217,7 +265,7 @@ a {
 }
 
 .loading-subtext {
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: 1.1rem;
     font-family: 'DM Sans', sans-serif;
     letter-spacing: 0.5px;
@@ -318,7 +366,7 @@ a {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--bg-nav);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -332,7 +380,7 @@ a {
 
 .menu-toggle {
     font-size: 1.8rem;
-    color: var(--light);
+    color: var(--text-primary);
     cursor: pointer;
     transition: var(--transition);
     z-index: 101;
@@ -349,12 +397,32 @@ a {
     transform: rotate(90deg);
 }
 
+.theme-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-primary);
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
 .logo {
     width: 60px;
     height: 60px;
     border-radius: 12px;
     overflow: hidden;
-    border: 2px solid var(--light);
+    border: 2px solid var(--text-primary);
     box-shadow: var(--shadow);
     transition: var(--transition);
 }
@@ -408,7 +476,7 @@ a {
 
 .mobile-social a {
     font-size: 1.5rem;
-    color: var(--light);
+    color: var(--text-primary);
     transition: var(--transition);
 }
 
@@ -483,13 +551,13 @@ a {
 .profile-info h1 {
     font-size: 3rem;
     margin-bottom: 0.5rem;
-    color: var(--light);
+    color: var(--text-primary);
     line-height: 1.2;
 }
 
 .profile-info .title {
     font-size: 1.2rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
     font-family: 'DM Sans', sans-serif;
 }
@@ -511,7 +579,7 @@ a {
     border: 1px solid rgba(99, 102, 241, 0.2);
     transition: var(--transition);
     font-size: 1.3rem;
-    color: var(--light);
+    color: var(--text-primary);
 }
 
 .social-links a:hover {
@@ -526,7 +594,7 @@ a {
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--light);
+    color: var(--text-primary);
     font-size: 1.5rem;
     animation: bounce 2s infinite;
     width: 40px;
@@ -570,7 +638,7 @@ a {
 
 .about-text p {
     margin-bottom: 1.5rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: 1.1rem;
     line-height: 1.7;
 }
@@ -611,7 +679,7 @@ a {
 }
 
 .stat-item p {
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-family: 'DM Sans', sans-serif;
 }
@@ -659,7 +727,7 @@ a {
 
 .tag {
     background: rgba(15, 23, 42, 0.9);
-    color: var(--light);
+    color: var(--text-primary);
     padding: 0.3rem 0.8rem;
     border-radius: 50px;
     font-size: 0.8rem;
@@ -677,11 +745,11 @@ a {
 .project-info h3 {
     margin-bottom: 1rem;
     font-size: 1.3rem;
-    color: var(--light);
+    color: var(--text-primary);
 }
 
 .project-description {
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
     flex: 1;
     font-size: 0.95rem;
@@ -727,7 +795,7 @@ a {
 
 .filter-btn:hover, .filter-btn.active {
     background: var(--primary);
-    color: var(--light);
+    color: var(--text-primary);
     transform: translateY(-2px);
 }
 
@@ -769,35 +837,44 @@ a {
 
 .skill-info h4 {
     margin-bottom: 0.5rem;
-    color: var(--light);
+    color: var(--text-primary);
 }
 
-.skill-progress {
-    width: 100%;
+.skill-level {
+    display: flex;
+    gap: 0.3rem;
+    margin: 0.5rem 0;
+}
+
+.level-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
-    height: 6px;
-    border-radius: 3px;
-    position: relative;
-    margin-top: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.skill-progress .progress-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: linear-gradient(to right, var(--primary), var(--accent));
-    border-radius: 3px;
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+.level-dot.filled {
+    background: var(--primary);
+    border-color: var(--primary-light);
 }
 
-.skill-progress span {
-    position: absolute;
-    right: 0;
-    top: -25px;
-    font-size: 0.8rem;
-    color: var(--gray);
+.skill-expertise {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
     font-family: 'DM Sans', sans-serif;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
 /* Contact Section */
@@ -815,11 +892,11 @@ a {
 .contact-info h3 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    color: var(--light);
+    color: var(--text-primary);
 }
 
 .contact-info p {
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-bottom: 2rem;
     line-height: 1.7;
 }
@@ -859,29 +936,49 @@ a {
 .form-group textarea {
     width: 100%;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: 8px;
-    color: var(--light);
+    color: var(--text-primary);
     font-family: 'DM Sans', sans-serif;
     transition: var(--transition);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: var(--gray);
+    color: var(--text-secondary);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 3px var(--input-focus);
 }
 
 .form-group textarea {
     min-height: 150px;
     resize: vertical;
+}
+
+.error-message {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.form-group input:invalid,
+.form-group textarea:invalid {
+    border-color: var(--danger);
+}
+
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
 }
 
 /* Footer */
@@ -909,7 +1006,7 @@ a {
     width: 50px;
     height: 50px;
     border-radius: 12px;
-    border: 2px solid var(--light);
+    border: 2px solid var(--text-primary);
 }
 
 .footer-logo p {
@@ -954,7 +1051,7 @@ a {
 .social-icons a {
     font-size: 1.5rem;
     transition: var(--transition);
-    color: var(--gray);
+    color: var(--text-secondary);
 }
 
 .social-icons a:hover {
@@ -966,7 +1063,7 @@ a {
     text-align: center;
     padding-top: 2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--gray);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-family: 'DM Sans', sans-serif;
 }
@@ -990,7 +1087,7 @@ a {
         left: -100%;
         width: 80%;
         height: 100vh;
-        background: rgba(15, 23, 42, 0.95);
+        background: var(--bg-nav);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         flex-direction: column;
@@ -1023,6 +1120,11 @@ a {
     .profile-photo {
         width: 220px;
         height: 220px;
+    }
+    
+    .particle {
+        width: 8px !important;
+        height: 8px !important;
     }
 }
 
@@ -1060,6 +1162,16 @@ a {
     .stat-item h3 {
         font-size: 2rem;
     }
+    
+    .skill-item {
+        padding: 1rem;
+    }
+    
+    .skill-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1092,5 +1204,13 @@ a {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+    }
+    
+    .contact-form {
+        gap: 1rem;
+    }
+    
+    .button {
+        padding: 0.7rem 1.5rem;
     }
 }

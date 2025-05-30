@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import './HomePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faTwitter, faTelegram, faYoutube, faTiktok, faJs, faReact, faNodeJs, faPython, faHtml5, faJava, faPhp } from '@fortawesome/free-brands-svg-icons';
-import { faBars, faMobileAlt, faCode, faServer, faPaintBrush, faEnvelope, faFileDownload, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faMobileAlt, faEnvelope, faFileDownload, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import emailjs from 'emailjs-com';
 import Notification from './Notification';
 import ChatBoard from './ChatBoard';
@@ -20,16 +20,18 @@ const projects = [
         image: "/hospitalmanagementsystem.png",
         link: "https://testhospitalmanagment.netlify.app",
         tags: ["Full Stack", "Healthcare"],
-        keywords: ["hospital management", "healthcare software", "medical chatbot"]
+        keywords: ["hospital management", "healthcare software", "medical chatbot"],
+        date: "2023-06"
     },
     {
         title: "Anonymous Message Board",
         description: "Secure platform for anonymous messaging with category filtering and spam protection. Built with MERN stack (MongoDB, Express, React, Node.js) for secure communication.",
         technologies: ["React", "Node.js", "Express", "MongoDB"],
         image: "/logoanonymusm.png",
-        link: "https://anonymousboard.netlify.app/",
+        link: "https://anonymus-message-board.vercel.app/",
         tags: ["Full Stack", "Security"],
-        keywords: ["anonymous messaging", "secure board", "privacy app"]
+        keywords: ["anonymous messaging", "secure board", "privacy app"],
+        date: "2023-09"
     },
     {
         title: "Nutritional Value Management",
@@ -38,7 +40,8 @@ const projects = [
         image: "/Nutritional Value Management of Wolaita Traditional Food.png",
         link: "https://github.com/ABREHAMonly/wolaitan-traditional-food-NV-mobile-app",
         tags: ["Mobile", "Health"],
-        keywords: ["nutrition app", "food analysis", "health mobile app"]
+        keywords: ["nutrition app", "food analysis", "health mobile app"],
+        date: "2022-12"
     },
     {
         title: "Healthcare Chatbot",
@@ -47,7 +50,8 @@ const projects = [
         image: "/chatbot.png",
         link: "https://github.com/ABREHAMonly/Chatbot-in-healthcare-web-based",
         tags: ["AI", "Healthcare"],
-        keywords: ["health chatbot", "medical AI", "symptom checker"]
+        keywords: ["health chatbot", "medical AI", "symptom checker"],
+        date: "2023-03"
     },
     {
         title: "Lost And Found System",
@@ -56,7 +60,8 @@ const projects = [
         image: "/LostAndFoundlogo.png",
         link: "#",
         tags: ["Mobile", "Community"],
-        keywords: ["lost and found app", "community app", "item recovery"]
+        keywords: ["lost and found app", "community app", "item recovery"],
+        date: "2024-01"
     },
     {
         title: "New Project Coming Soon",
@@ -65,20 +70,21 @@ const projects = [
         image: "/commingsoon.png",
         link: "#",
         tags: ["Upcoming"],
-        keywords: ["new project", "coming soon", "portfolio work"]
+        keywords: ["new project", "coming soon", "portfolio work"],
+        date: "2024-05"
     },
 ];
 
-// Skills data with SEO-friendly categorization
+// Skills data with qualitative levels (1-5) instead of percentages
 const skills = [
-    { name: "JavaScript", icon: faJs, percentage: 85, category: "Frontend", expertise: "Advanced" },
-    { name: "React", icon: faReact, percentage: 90, category: "Frontend", expertise: "Expert" },
-    { name: "React Native", icon: faMobileAlt, percentage: 85, category: "Mobile", expertise: "Advanced" },
-    { name: "Node.js", icon: faNodeJs, percentage: 80, category: "Backend", expertise: "Advanced" },
-    { name: "Python", icon: faPython, percentage: 75, category: "Backend", expertise: "Intermediate" },
-    { name: "HTML & CSS", icon: faHtml5, percentage: 95, category: "Frontend", expertise: "Expert" },
-    { name: "Java", icon: faJava, percentage: 70, category: "Mobile", expertise: "Intermediate" },
-    { name: "PHP", icon: faPhp, percentage: 70, category: "Backend", expertise: "Intermediate" }
+    { name: "JavaScript", icon: faJs, level: 4, category: "Frontend", expertise: "Advanced" },
+    { name: "React", icon: faReact, level: 4, category: "Frontend", expertise: "Expert" },
+    { name: "React Native", icon: faMobileAlt, level: 3, category: "Mobile", expertise: "Advanced" },
+    { name: "Node.js", icon: faNodeJs, level: 4, category: "Backend", expertise: "Advanced" },
+    { name: "Python", icon: faPython, level: 3, category: "Backend", expertise: "Intermediate" },
+    { name: "HTML & CSS", icon: faHtml5, level: 4, category: "Frontend", expertise: "Expert" },
+    { name: "Java", icon: faJava, level: 3, category: "Mobile", expertise: "Intermediate" },
+    { name: "PHP", icon: faPhp, level: 3, category: "Backend", expertise: "Intermediate" }
 ];
 
 const HomePage = () => {
@@ -92,7 +98,15 @@ const HomePage = () => {
         email: '',
         message: ''
     });
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
 
+    // Initialize AOS and particles
     useEffect(() => {
         AOS.init({ 
             duration: 800,
@@ -100,36 +114,80 @@ const HomePage = () => {
             easing: 'ease-out-quart'
         });
         
+        // Set dark mode based on user preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setDarkMode(prefersDark);
+
         // Generate random particles
-        const particles = document.querySelectorAll('.particle');
-        particles.forEach(particle => {
-            const size = Math.random() * 15 + 5;
-            const posX = Math.random() * 100;
-            const posY = Math.random() * 100;
-            const duration = Math.random() * 20 + 10;
-            const delay = Math.random() * 5;
-            
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            particle.style.left = `${posX}%`;
-            particle.style.top = `${posY}%`;
-            particle.style.animationDuration = `${duration}s`;
-            particle.style.animationDelay = `${delay}s`;
-            particle.style.opacity = Math.random() * 0.6 + 0.2;
-        });
+        const generateParticles = () => {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => {
+                const size = Math.random() * 15 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.opacity = Math.random() * 0.6 + 0.2;
+            });
+        };
+
+        generateParticles();
 
         const timer = setTimeout(() => setIsLoading(false), 2500);
         return () => clearTimeout(timer);
     }, []);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-        document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
-    };
+    // Toggle dark mode
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    }, [darkMode]);
 
-    const validateEmail = (email) => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
+    const toggleMenu = useCallback(() => {
+        setIsMenuOpen(prev => {
+            document.body.style.overflow = !prev ? 'hidden' : 'auto';
+            return !prev;
+        });
+    }, []);
+
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = {
+            name: '',
+            email: '',
+            message: ''
+        };
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+            valid = false;
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+            valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+            valid = false;
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Message is required';
+            valid = false;
+        }
+
+        setFormErrors(newErrors);
+        return valid;
     };
 
     const handleInputChange = (e) => {
@@ -138,25 +196,27 @@ const HomePage = () => {
             ...prev,
             [name]: value
         }));
+        
+        // Clear error when user starts typing
+        if (formErrors[name]) {
+            setFormErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
     };
 
     const sendEmail = async (e) => {
         e.preventDefault();
         
-        if (!formData.name || !formData.email || !formData.message) {
-            setNotification({ message: 'All fields are required!', type: 'error', visible: true });
-            return;
-        }
+        if (!validateForm()) return;
 
-        if (!validateEmail(formData.email)) {
-            setNotification({ message: 'Please enter a valid email address!', type: 'error', visible: true });
-            return;
-        }
+        setIsSubmitting(true);
 
         try {
             await emailjs.send(
-                process.env.REACT_APP_SERVICE_ID,
-                process.env.REACT_APP_TEMPLATE_ID,
+                process.env.REACT_APP_SERVICE_ID || 'default_service_id',
+                process.env.REACT_APP_TEMPLATE_ID || 'default_template_id',
                 {
                     from_name: formData.name,
                     to_name: "Abreham",
@@ -164,7 +224,7 @@ const HomePage = () => {
                     to_email: "abrehamonly@gmail.com",
                     message: formData.message
                 },
-                process.env.REACT_APP_PUBLIC_KEY
+                process.env.REACT_APP_PUBLIC_KEY || 'default_public_key'
             );
 
             setNotification({ 
@@ -180,12 +240,14 @@ const HomePage = () => {
             });
             
         } catch (error) {
-            console.error('Error:', error);
+            console.error('EmailJS Error:', error);
             setNotification({ 
                 message: 'Failed to send message. Please try again later.', 
                 type: 'error', 
                 visible: true 
             });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -246,7 +308,7 @@ const HomePage = () => {
     }
 
     return (
-        <div className="container" itemScope itemType="https://schema.org/Person">
+        <div className={`container ${darkMode ? 'dark-mode' : ''}`} itemScope itemType="https://schema.org/Person">
             <Helmet>
                 {/* Primary Meta Tags */}
                 <title>Abreham Yetwale | Full-stack Developer Portfolio</title>
@@ -282,7 +344,7 @@ const HomePage = () => {
             {/* Background Elements */}
             <div className="gradient-background"></div>
             <div className="particles">
-                {[...Array(30)].map((_, i) => (
+                {[...Array(window.innerWidth < 768 ? 15 : 30)].map((_, i) => (
                     <div key={i} className="particle"></div>
                 ))}
             </div>
@@ -293,10 +355,10 @@ const HomePage = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </div>
                 <nav className={`header-links ${isMenuOpen ? 'open' : ''}`}>
-                    <a href="#about" onClick={() => setIsMenuOpen(false)} aria-label="About section">About</a>
-                    <a href="#projects" onClick={() => setIsMenuOpen(false)} aria-label="Projects section">Projects</a>
-                    <a href="#skills" onClick={() => setIsMenuOpen(false)} aria-label="Skills section">Skills</a>
-                    <a href="#contact" onClick={() => setIsMenuOpen(false)} aria-label="Contact section">Contact</a>
+                    <a href="#about" onClick={toggleMenu} aria-label="About section">About</a>
+                    <a href="#projects" onClick={toggleMenu} aria-label="Projects section">Projects</a>
+                    <a href="#skills" onClick={toggleMenu} aria-label="Skills section">Skills</a>
+                    <a href="#contact" onClick={toggleMenu} aria-label="Contact section">Contact</a>
                     <div className="mobile-social">
                         <a href="https://github.com/ABREHAMonly" aria-label="GitHub profile"><FontAwesomeIcon icon={faGithub} /></a>
                         <a href="https://linkedin.com/in/abreham-yetwale" aria-label="LinkedIn profile"><FontAwesomeIcon icon={faLinkedin} /></a>
@@ -307,18 +369,35 @@ const HomePage = () => {
                     </div>
                 </nav>
                 <div className="logo">
-                    <img src="/1logoab.png" alt="Abreham Yetwale Logo - Full-stack Developer" />
+                    <img src="/1logoab.png" alt="Abreham Yetwale Logo - Full-stack Developer" loading="lazy" />
                 </div>
+                <button 
+                    className="theme-toggle"
+                    onClick={() => setDarkMode(!darkMode)}
+                    aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
+                >
+                    {darkMode ? '☀️' : '🌙'}
+                </button>
             </header>
 
+            {/* Skip to Content Link */}
+            <a href="#main-content" className="skip-link">Skip to content</a>
+
             {/* Main Content */}
-            <main className="main-content">
+            <main className="main-content" id="main-content">
                 {/* Hero Section */}
                 <section className="hero-section" id="home" itemScope itemType="https://schema.org/ProfilePage">
                     <div className="hero-content">
                         <div className="profile-container" data-aos="fade-up">
                             <div className="profile-photo">
-                                <img src="/abreham-yetwale-profile.jpg" alt="Abreham Yetwale - Full-stack Developer" itemProp="image" />
+                                <img 
+                                    src="/abreham-yetwale-profile.jpg" 
+                                    alt="Abreham Yetwale - Full-stack Developer" 
+                                    itemProp="image"
+                                    loading="eager"
+                                    width="200"
+                                    height="200"
+                                />
                                 <div className="photo-border"></div>
                             </div>
                             <div className="profile-info">
@@ -372,15 +451,15 @@ const HomePage = () => {
                         </div>
                         <div className="about-stats">
                             <div className="stat-item">
-                                <h3>15+</h3>
+                                <h3>--</h3>
                                 <p>Projects Completed</p>
                             </div>
                             <div className="stat-item">
-                                <h3>3+</h3>
+                                <h3>--</h3>
                                 <p>Years Experience</p>
                             </div>
                             <div className="stat-item">
-                                <h3>95%</h3>
+                                <h3>--</h3>
                                 <p>Client Satisfaction</p>
                             </div>
                         </div>
@@ -403,12 +482,15 @@ const HomePage = () => {
                                 itemScope
                                 itemType="https://schema.org/CreativeWork"
                             >
+                                <meta itemProp="dateCreated" content={project.date} />
                                 <div className="project-image">
                                     <img 
                                         src={project.image} 
                                         alt={`${project.title} - ${project.description.substring(0, 60)}...`} 
                                         loading="lazy"
                                         itemProp="image"
+                                        width="400"
+                                        height="300"
                                     />
                                     <div className="project-tags">
                                         {project.tags.map((tag, i) => (
@@ -453,6 +535,7 @@ const HomePage = () => {
                                 className={`filter-btn ${activeFilter === category ? 'active' : ''}`}
                                 onClick={() => setActiveFilter(category)}
                                 aria-label={`Filter skills by ${category}`}
+                                aria-pressed={activeFilter === category}
                             >
                                 {category}
                             </button>
@@ -479,16 +562,21 @@ const HomePage = () => {
                                     <div className="skill-info">
                                         <h4 itemProp="name">{skill.name}</h4>
                                         <meta itemProp="skillLevel" content={skill.expertise} />
-                                        <div className="skill-progress">
-                                            <div 
-                                                className="progress-bar" 
-                                                style={{ width: `${activeSkill === index ? skill.percentage : 0}%` }}
-                                                aria-valuenow={skill.percentage}
-                                                aria-valuemin="0"
-                                                aria-valuemax="100"
-                                            ></div>
-                                            <span>{activeSkill === index ? `${skill.percentage}%` : '0%'}</span>
+                                        <div className="skill-level">
+                                            <div className="level-indicator">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <div 
+                                                        key={i} 
+                                                        className={`level-dot ${i < skill.level ? 'filled' : ''}`}
+                                                        aria-hidden="true"
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span className="sr-only">
+                                                {skill.name} skill level: {skill.level} out of 5
+                                            </span>
                                         </div>
+                                        <p className="skill-expertise">{skill.expertise}</p>
                                     </div>
                                 </div>
                             ))}
@@ -525,7 +613,10 @@ const HomePage = () => {
                                     required
                                     itemProp="name"
                                     aria-label="Your name"
+                                    aria-invalid={!!formErrors.name}
+                                    aria-describedby={formErrors.name ? "name-error" : undefined}
                                 />
+                                {formErrors.name && <span id="name-error" className="error-message">{formErrors.name}</span>}
                             </div>
                             <div className="form-group">
                                 <input
@@ -537,7 +628,10 @@ const HomePage = () => {
                                     required
                                     itemProp="email"
                                     aria-label="Your email"
+                                    aria-invalid={!!formErrors.email}
+                                    aria-describedby={formErrors.email ? "email-error" : undefined}
                                 />
+                                {formErrors.email && <span id="email-error" className="error-message">{formErrors.email}</span>}
                             </div>
                             <div className="form-group">
                                 <textarea
@@ -548,10 +642,20 @@ const HomePage = () => {
                                     required
                                     itemProp="message"
                                     aria-label="Your message"
+                                    aria-invalid={!!formErrors.message}
+                                    aria-describedby={formErrors.message ? "message-error" : undefined}
                                 ></textarea>
+                                {formErrors.message && <span id="message-error" className="error-message">{formErrors.message}</span>}
                             </div>
-                            <button type="submit" className="button" aria-label="Send message">
-                                Send Message
+                            {/* Honeypot field for spam prevention */}
+                            <input type="text" name="honeypot" className="honeypot" tabIndex="-1" autoComplete="off" />
+                            <button 
+                                type="submit" 
+                                className="button" 
+                                aria-label="Send message"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Sending...' : 'Send Message'}
                             </button>
                         </form>
                     </div>
@@ -562,7 +666,7 @@ const HomePage = () => {
             <footer className="footer" itemScope itemType="https://schema.org/WPFooter">
                 <div className="footer-content">
                     <div className="footer-logo">
-                        <img src="/1logoab.png" alt="Abreham Yetwale Logo" />
+                        <img src="/1logoab.png" alt="Abreham Yetwale Logo" loading="lazy" width="50" height="50" />
                         <p itemProp="name">Abreham Yetwale</p>
                     </div>
                     <div className="footer-links">
