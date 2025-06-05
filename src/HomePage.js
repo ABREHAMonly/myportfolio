@@ -18,10 +18,10 @@ const projects = [
         description: "A comprehensive hospital management system with integrated AI chatbot functionality built with React, Node.js, and MongoDB. This system streamlines patient records, appointments, and hospital administration.",
         technologies: ["React", "Node.js", "Express", "MongoDB"],
         image: "/hospitalmanagementsystem.png",
-        link: "https://testhospitalmanagment.netlify.app",
+        link: "https://medicare-theta-smoky.vercel.app/",
         tags: ["Full Stack", "Healthcare"],
         keywords: ["hospital management", "healthcare software", "medical chatbot"],
-        date: "2023-06"
+        date: "2025-02"
     },
     {
         title: "Anonymous Message Board",
@@ -31,7 +31,7 @@ const projects = [
         link: "https://anonymus-message-board.vercel.app/",
         tags: ["Full Stack", "Security"],
         keywords: ["anonymous messaging", "secure board", "privacy app"],
-        date: "2023-09"
+        date: "2025-04"
     },
     {
         title: "Nutritional Value Management",
@@ -41,7 +41,7 @@ const projects = [
         link: "https://github.com/ABREHAMonly/wolaitan-traditional-food-NV-mobile-app",
         tags: ["Mobile", "Health"],
         keywords: ["nutrition app", "food analysis", "health mobile app"],
-        date: "2022-12"
+        date: "2025-03"
     },
     {
         title: "Healthcare Chatbot",
@@ -51,7 +51,7 @@ const projects = [
         link: "https://github.com/ABREHAMonly/Chatbot-in-healthcare-web-based",
         tags: ["AI", "Healthcare"],
         keywords: ["health chatbot", "medical AI", "symptom checker"],
-        date: "2023-03"
+        date: "2025-04"
     },
     {
         title: "Lost And Found System",
@@ -61,7 +61,7 @@ const projects = [
         link: "#",
         tags: ["Mobile", "Community"],
         keywords: ["lost and found app", "community app", "item recovery"],
-        date: "2024-01"
+        date: "2025-05"
     },
     {
         title: "New Project Coming Soon",
@@ -71,7 +71,7 @@ const projects = [
         link: "#",
         tags: ["Upcoming"],
         keywords: ["new project", "coming soon", "portfolio work"],
-        date: "2024-05"
+        date: "2025-06"
     },
 ];
 
@@ -432,7 +432,7 @@ const HomePage = () => {
                         <div className="about-text" itemProp="description">
                             <p>
                                 I'm a passionate full-stack developer with expertise in building modern web and mobile applications. 
-                                With a strong foundation in computer science and hands-on experience in JavaScript, React, Node.js, and Python, 
+                                With a strong foundation in computer science and hands-on experience in Java, Python, JavaScript, React, Node.js, PHP and HTML&CSS, 
                                 I create efficient, scalable, and user-friendly solutions.
                             </p>
                             <p>
